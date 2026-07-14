@@ -17,6 +17,15 @@ app.use(cors({
   credentials: true,
 }));
 
+// Parse JSON body only when content exists (refresh/logout send no body)
+app.use((req, res, next) => {
+  if (req.headers['content-type']?.includes('application/json') &&
+      (!req.headers['content-length'] || req.headers['content-length'] === '0')) {
+    req.body = {};
+    return next();
+  }
+  next();
+});
 app.use(express.json());
 app.use(cookieParser());
 
