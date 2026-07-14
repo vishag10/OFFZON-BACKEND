@@ -2,14 +2,11 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import Admin from '../../models/admin/Admin.ts';
 
-const ACCESS_SECRET = process.env.ACCESS_TOKEN_SECRET!;
-const REFRESH_SECRET = process.env.REFRESH_TOKEN_SECRET!;
-
 export const generateAccessToken = (payload: object) =>
-  jwt.sign(payload, ACCESS_SECRET, { expiresIn: '15m' });
+  jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET!, { expiresIn: '15m' });
 
 export const generateRefreshToken = (payload: object) =>
-  jwt.sign(payload, REFRESH_SECRET, { expiresIn: '7d' });
+  jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET!, { expiresIn: '7d' });
 
 export const loginService = async (email: string, password: string) => {
   const admin = await Admin.findOne({ email });
@@ -35,7 +32,7 @@ export const refreshService = async (refreshToken: string) => {
 
   let decoded: any;
   try {
-    decoded = jwt.verify(refreshToken, REFRESH_SECRET);
+    decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!);
   } catch {
     throw new Error('Invalid or expired refresh token');
   }
