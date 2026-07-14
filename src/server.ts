@@ -3,16 +3,24 @@ dns.setServers(['8.8.8.8', '8.8.4.4']);
 
 import 'dotenv/config';
 import express from 'express';
-import { sessionMiddleware } from './middleware/session.ts';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import { connectDatabase } from './config/database.ts';
 import apiGateway from './utils/apiGateway.ts';
 import { startKeepAlive } from './cron/keepAlive.ts';
 
 const app = express();
-app.use(express.json());
-app.use(sessionMiddleware);
 
-// API Gateway - All routes
+// CORS — allow frontend origin with credentials (cookies)
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
+}));
+
+app.use(express.json());
+app.use(cookieParser());
+
+// API Gateway
 app.use('/api', apiGateway);
 
 app.get('/health', (req, res) => {
