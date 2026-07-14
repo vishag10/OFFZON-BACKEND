@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "type": "module",
   "main": "src/server.ts",
-  "build": "tsc",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "nodemon --exec node src/server.ts"
+    "dev": "nodemon --exec node src/server.ts",
+    "build": "tsc"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
