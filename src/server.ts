@@ -6,6 +6,7 @@ import express from 'express';
 import { sessionMiddleware } from './middleware/session.ts';
 import { connectDatabase } from './config/database.ts';
 import apiGateway from './utils/apiGateway.ts';
+import { startKeepAlive } from './cron/keepAlive.ts';
 
 const app = express();
 app.use(express.json());
@@ -25,6 +26,7 @@ const startServer = async () => {
     await connectDatabase();
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
+      startKeepAlive();
     });
   } catch (error) {
     console.error('Server failed to start:', error.message);
